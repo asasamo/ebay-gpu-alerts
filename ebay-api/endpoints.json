@@ -1,0 +1,7 @@
+{
+    "BASE_URL": "https://api.ebay.com",
+    "buy": {
+        "search": "/buy/browse/v1/item_summary/search"
+    },
+    "feed": {}
+}

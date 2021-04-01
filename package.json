@@ -1,0 +1,22 @@
+{
+  "name": "ebay-gpu-alerts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asasamo/ebay-gpu-alerts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/asasamo/ebay-gpu-alerts/issues"
+  },
+  "homepage": "https://github.com/asasamo/ebay-gpu-alerts#readme",
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
