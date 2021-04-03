@@ -10,11 +10,13 @@ const config = require('./config.json')
 const itemSchema = require('./models/item')
 
 function parseQueries(queryArray) {
+    /*
     let resultArray = []
     queryArray.forEach((v) => {
         resultArray.push(v.split(' ').join('+'))
     })
-    return resultArray
+    */
+    return queryArray
 }
 
 async function start() {
@@ -31,7 +33,7 @@ async function start() {
         })
     })
 
-    await setInterval(() => {
+    await setTimeout(() => {
         start()
     }, config.delay * 1000)
 }
