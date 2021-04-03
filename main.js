@@ -20,15 +20,12 @@ function parseQueries(queryArray) {
 async function start() {
     log.info('Searching...')
     parseQueries(config.gpusQueries).forEach(async (query, index) => {
-        let oldItems = 0
         let results = await searchNewlyAdded(query)
-        await results.forEach((result, i) => {
+        results.forEach((result, i) => {
             new itemSchema(result)
                 .save((err, result) => {
                     if (!err) {
-                        log.newItem(query, result.title, result.price + result.shippingCost)
-                    } else {
-                        oldItems++
+                        log.newItem(query, result.title, (result.price + result.shippingCost).toFixed(2))
                     }
                 })
         })

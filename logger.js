@@ -10,9 +10,13 @@ module.exports.error = (error) => {
 }
 
 module.exports.newItem = (query, item, fullPrice) => {
-    if (fullPrice < 380) {
-        console.log(colors.bgMagenta(`[${moment().format('HH:mm:ss')}] New Item for [${query}], ${fullPrice}€: ${item}`))
+    if (fullPrice <= 380) {
+        console.log(`[${moment().format('HH:mm:ss')}] ` + colors.black.bgWhite(`New Item for [${query}]`) + ', ' + colors.bgGreen(`${fullPrice}€`) + colors.white(': ' + item))
+    } else if (fullPrice <= 500) {
+        console.log(`[${moment().format('HH:mm:ss')}] ` + colors.black.bgWhite(`New Item for [${query}]`) + ', ' + colors.bgYellow(`${fullPrice}€`) + colors.white(': ' + item))
+    } else if (fullPrice <= 700) {
+        console.log(`[${moment().format('HH:mm:ss')}] ` + colors.black.bgWhite(`New Item for [${query}]`) + ', ' + colors.bgRed(`${fullPrice}€`) + colors.white(': ' + item))
     } else {
-        console.log(colors.bgGreen(`[${moment().format('HH:mm:ss')}] New Item for [${query}], ${fullPrice}€: ${item}`))
+        console.log(`[${moment().format('HH:mm:ss')}] ` + colors.black.bgWhite(`New Item for [${query}]`) + ', ' + colors.bgGray(`${fullPrice}€`) + colors.white(': ' + item))
     }
 }
