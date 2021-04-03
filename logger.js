@@ -9,6 +9,10 @@ module.exports.error = (error) => {
     console.log(colors.bgRed(`[${moment().format('HH:mm:ss')}] ${error}`))
 }
 
-module.exports.newItem = (item) => {
-    console.log(colors.bgGreen(`[${moment().format('HH:mm:ss')}] New Item: ${item}`))
+module.exports.newItem = (query, item, fullPrice) => {
+    if (fullPrice < 380) {
+        console.log(colors.bgMagenta(`[${moment().format('HH:mm:ss')}] New Item for [${query}], ${fullPrice}€: ${item}`))
+    } else {
+        console.log(colors.bgGreen(`[${moment().format('HH:mm:ss')}] New Item for [${query}], ${fullPrice}€: ${item}`))
+    }
 }

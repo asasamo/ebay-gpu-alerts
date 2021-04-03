@@ -19,14 +19,19 @@ function parseQueries(queryArray) {
 
 async function start() {
     log.info('Searching...')
-    let results = await searchNewlyAdded('rtx+3060')
-    results.forEach((result, i) => {
-        new itemSchema(result)
-            .save((err, result) => {
-                if (!err) {
-                    log.newItem(result.title)
-                }
-            })
+    parseQueries(config.gpusQueries).forEach(async (query, index) => {
+        let oldItems = 0
+        let results = await searchNewlyAdded(query)
+        await results.forEach((result, i) => {
+            new itemSchema(result)
+                .save((err, result) => {
+                    if (!err) {
+                        log.newItem(query, result.title, result.price + result.shippingCost)
+                    } else {
+                        oldItems++
+                    }
+                })
+        })
     })
 
     await setInterval(() => {
