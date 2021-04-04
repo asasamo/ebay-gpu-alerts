@@ -4,8 +4,10 @@ const config = require('../config.json')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.start((ctx) => {
-    log.botNewUser(ctx.chat)
-    bot.telegram.sendMessage(config.telegramAdmin, `Nuovo utente:\nUsername ${ctx.chat.username}\nChatId: ${ctx.chat.id}`)
+    if (!config.telegramUsers.includes(ctx.chat.id)) {
+        log.botNewUser(ctx.chat)
+        bot.telegram.sendMessage(config.telegramAdmin, `Nuovo utente:\nUsername ${ctx.chat.username}\nChatId: ${ctx.chat.id}`)
+    }
 })
 
 
