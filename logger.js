@@ -24,6 +24,10 @@ module.exports.newItem = (query, { title, type, conditions, price, shippingCost,
     }
 }
 
-module.exports.telegramBot = (botResult) => {
+module.exports.botNewItem = (botResult) => {
     this.info(colors.bgMagenta(`Telegram Bot: ${botResult}`))
+}
+
+module.exports.botNewUser = ({ id, username }) => {
+    this.info(colors.bgMagenta(`New user [${username}] with chatId [${id}]`))
 }

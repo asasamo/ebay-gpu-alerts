@@ -21,7 +21,7 @@ function start() {
                     .save(async (err, result) => {
                         if (!err) {
                             log.newItem(query, result)
-                            log.telegramBot(await botSend(result))
+                            log.botNewItem(await botSend(query, result))
                         }
                     })
             })

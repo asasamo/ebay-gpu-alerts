@@ -3,21 +3,34 @@ const log = require('../logger')
 const config = require('../config.json')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
-bot.command('oldschool', (ctx) => ctx.reply('Hello'))
-bot.command('hipster', Telegraf.reply('λ'))
-bot.launch()
-Telegraf.Types
-module.exports.botSend = async ({ url, title, image, type, conditions, price, shippingCost, location }) => {
+bot.start((ctx) => {
+    log.botNewUser(ctx.chat)
+    bot.telegram.sendMessage(config.telegramAdmin, `Nuovo utente:\nUsername ${ctx.chat.username}\nChatId: ${ctx.chat.id}`)
+})
+
+
+module.exports.botSend = async (query, { url, title, image, type, conditions, price, shippingCost, location }) => {
     config.telegramUsers.forEach(chatId => {
-        bot.telegram.sendPhoto(chatId,
-            image,
-            { caption: `${title} - ${price}€ / ${shippingCost}€ - ${type} - ${conditions} - ${location} - ${url}` }
-        ).catch((err) => log.error(err))
+        let caption = `Nuovo oggetto trovato per [${query}]:\n-Titolo: ${title}\n-Prezzo: ${price}€ / ${shippingCost}€\n-Tipo inserzione: ${type}\n-Condizioni: ${conditions}\n-Posizione: ${location}\n-Link: ${url}`
+        if ((price + shippingCost) <= 550) {
+            bot.telegram.sendPhoto(chatId,
+                image,
+                { caption: '🔴🔴🔴\n' + caption }
+            ).catch((err) => {
+                log.error(err)
+                return 'notification error'
+            })
+        } else {
+            bot.telegram.sendPhoto(chatId,
+                image,
+                { caption: caption }
+            ).catch((err) => {
+                log.error(err)
+                return 'notification error'
+            })
+        }
     })
-    return 'done'
+    return 'notification sent'
 }
 
-
-// Enable graceful stop
-process.once('SIGINT', () => bot.stop('SIGINT'))
-process.once('SIGTERM', () => bot.stop('SIGTERM'))
+bot.launch()
