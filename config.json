@@ -6,5 +6,8 @@
         "rtx 3060",
         "rtx 3060 ti"
     ],
+    "telegramUsers": [
+        523591653
+    ],
     "delay": 900
 }

@@ -4,36 +4,29 @@ const { searchNewlyAdded } = require('./ebay-api/api')
 const log = require('./logger')
 const _ = require('lodash')
 const mongoose = require('mongoose')
+const { botSend } = require('./telegram/telegram')
 
 const config = require('./config.json')
 
 const itemSchema = require('./models/item')
 
-function parseQueries(queryArray) {
-    /*
-    let resultArray = []
-    queryArray.forEach((v) => {
-        resultArray.push(v.split(' ').join('+'))
-    })
-    */
-    return queryArray
-}
 
-async function start() {
-    log.info('Searching...')
-    parseQueries(config.gpusQueries).forEach(async (query, index) => {
-        let results = await searchNewlyAdded(query)
-        results.forEach((result, i) => {
-            new itemSchema(result)
-                .save((err, result) => {
-                    if (!err) {
-                        log.newItem(query, result.title, (result.price + result.shippingCost).toFixed(2))
-                    }
-                })
+function start() {
+    setTimeout(() => {
+        log.info('Searching...')
+        config.gpusQueries.forEach(async (query, index) => {
+            let results = await searchNewlyAdded(query)
+            results.forEach((result, i) => {
+                new itemSchema(result)
+                    .save(async (err, result) => {
+                        if (!err) {
+                            log.newItem(query, result)
+                            log.telegramBot(await botSend(result))
+                        }
+                    })
+            })
         })
-    })
 
-    await setTimeout(() => {
         start()
     }, config.delay * 1000)
 }
@@ -48,4 +41,5 @@ mongoose.connect(config.MongoDB.replace('{{user}}',
             process.exit(1)
         }
     })
+
 start()

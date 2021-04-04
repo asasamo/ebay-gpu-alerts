@@ -9,14 +9,21 @@ module.exports.error = (error) => {
     console.log(colors.bgRed(`[${moment().format('HH:mm:ss')}] ${error}`))
 }
 
-module.exports.newItem = (query, item, fullPrice) => {
-    if (fullPrice <= 380) {
-        console.log(`[${moment().format('HH:mm:ss')}] ` + colors.black.bgWhite(`New Item for [${query}]`) + ', ' + colors.bgGreen(`${fullPrice}€`) + colors.white(': ' + item))
-    } else if (fullPrice <= 500) {
-        console.log(`[${moment().format('HH:mm:ss')}] ` + colors.black.bgWhite(`New Item for [${query}]`) + ', ' + colors.bgYellow(`${fullPrice}€`) + colors.white(': ' + item))
+module.exports.newItem = (query, { title, type, conditions, price, shippingCost, location }) => {
+    let fullPrice = (price + shippingCost).toFixed(2)
+
+    var first = colors.black.bgWhite(`New Item for "${query}": `)
+    if (fullPrice <= 450) {
+        this.info(first + colors.bgGreen(`[${price}€ / ${shippingCost}€]`) + ' ' + `[${conditions}][${type}][${location}]: ${title}`)
+    } else if (fullPrice <= 550) {
+        this.info(first + colors.bgYellow(`[${price}€ / ${shippingCost}€]`) + ' ' + `[${conditions}][${type}][${location}]: ${title}`)
     } else if (fullPrice <= 700) {
-        console.log(`[${moment().format('HH:mm:ss')}] ` + colors.black.bgWhite(`New Item for [${query}]`) + ', ' + colors.bgRed(`${fullPrice}€`) + colors.white(': ' + item))
+        this.info(first + colors.bgRed(`[${price}€ / ${shippingCost}€]`) + ' ' + `[${conditions}][${type}][${location}]: ${title}`)
     } else {
-        console.log(`[${moment().format('HH:mm:ss')}] ` + colors.black.bgWhite(`New Item for [${query}]`) + ', ' + colors.bgGray(`${fullPrice}€`) + colors.white(': ' + item))
+        this.info(first + colors.bgGray(`[${price}€ / ${shippingCost}€]`) + ' ' + `[${conditions}][${type}][${location}]: ${title}`)
     }
+}
+
+module.exports.telegramBot = (botResult) => {
+    this.info(colors.bgMagenta(`Telegram Bot: ${botResult}`))
 }
