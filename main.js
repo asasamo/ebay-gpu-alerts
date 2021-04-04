@@ -4,7 +4,7 @@ const { searchNewlyAdded } = require('./ebay-api/api')
 const log = require('./logger')
 const _ = require('lodash')
 const mongoose = require('mongoose')
-const { botSend } = require('./telegram/telegram')
+const { botSend, botNotify } = require('./telegram/telegram')
 
 const config = require('./config.json')
 
@@ -14,6 +14,7 @@ const itemSchema = require('./models/item')
 function start() {
     setTimeout(() => {
         log.info('Searching...')
+        // botNotify('Searching...') //Debug - annoying
         config.gpusQueries.forEach(async (query, index) => {
             let results = await searchNewlyAdded(query)
             results.forEach((result, i) => {
@@ -32,6 +33,7 @@ function start() {
 }
 
 log.info('Bot started!')
+botNotify('Bot started')
 mongoose.connect(config.MongoDB.replace('{{user}}',
     process.env.MONGODB_USER).replace('{{pass}}',
         process.env.MONGODB_PASS).replace('{{db}}', process.env.MONGODB_DB),

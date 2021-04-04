@@ -35,4 +35,8 @@ module.exports.botSend = async (query, { url, title, image, type, conditions, pr
     return 'notification sent'
 }
 
+module.exports.botNotify = async (message) => {
+    bot.telegram.sendMessage(config.telegramAdmin, `Notifica: ${message}`)
+}
+
 bot.launch()
