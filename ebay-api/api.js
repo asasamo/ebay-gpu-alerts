@@ -35,6 +35,7 @@ module.exports.searchNewlyAdded = async (query) => {
         items.push({
             itemId: itemId,
             url: `${endpoints.BASE_URL}${endpoints.item}/${itemId}`,
+            query: query.replaceAll(' ', '-'),
             title: title.replaceAll(emojiRegexp, '').trim(),
             image: imageUrl,
             type: itemType,

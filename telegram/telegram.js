@@ -2,7 +2,28 @@ const { Telegraf } = require('telegraf')
 const log = require('../logger')
 const config = require('../config.json')
 
+const item = require('../models/item')
+
 const bot = new Telegraf(process.env.BOT_TOKEN)
+
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array);
+    }
+  }
+
+bot.command('statistiche', async (ctx) => {
+    var total_items = await item.countDocuments()
+    var messaggio = `---------------Statistiche---------------\n⚫Totali: ${total_items} oggetti\n⚫Percentuale per query:`
+    await asyncForEach(config.gpusQueries, async (e) => {
+        let numero_per_query = await item.find({ query: e.replaceAll(' ', '-') }).countDocuments()
+        messaggio += `\n    - [${e.replaceAll(' ', '-')}]: ${((numero_per_query * 100) / total_items).toFixed(1)}%`
+    })
+    var prezzo_medio = await item.aggregate([{$group: {_id:null, AverageValue: {$avg:"$price"} } }])
+    messaggio += `\n⚫Prezzo medio: ${prezzo_medio[0].AverageValue.toFixed(2)}€`
+    ctx.reply(messaggio)
+})
+
 bot.start((ctx) => {
     if (!config.telegramUsers.includes(ctx.chat.id)) {
         log.botNewUser(ctx.chat)

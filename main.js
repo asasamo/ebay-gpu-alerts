@@ -29,7 +29,7 @@ function start() {
         })
 
         start()
-    }, config.delay * 1000)
+    }, config.delay * 3600)
 }
 
 log.info('Bot started!')

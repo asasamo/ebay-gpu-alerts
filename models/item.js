@@ -7,6 +7,7 @@ const itemSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
+    query: String,
     url: String,
     title: {
         type: String,
