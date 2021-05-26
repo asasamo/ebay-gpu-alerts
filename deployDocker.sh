@@ -1,3 +1,5 @@
+#docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+
 export PROJECT_NAME=ebay-gpu-alerts
 
 echo "Building $PROJECT_NAME..."
