@@ -18,7 +18,7 @@ bot.start(async (ctx) => {
     })
     if (!chatIds.includes(ctx.chat.id)) {
         log.botNewUser(ctx.chat)
-        bot.telegram.sendMessage(_.find(users, {isAdmin: true}).chatId, `Nuovo utente:\nUsername ${ctx.chat.username}\nChatId: ${ctx.chat.id}`)
+        bot.telegram.sendMessage(_.find(users, { isAdmin: true }).chatId, `Nuovo utente:\nUsername ${ctx.chat.username}\nChatId: ${ctx.chat.id}`)
     }
 })
 
@@ -27,7 +27,7 @@ module.exports.botSend = async (query, { url, title, image, type, conditions, pr
     users.forEach(user => {
         let caption = `Nuovo oggetto trovato per [${query}]:\n-Titolo: ${title}\n-Prezzo: ${price}€ / ${shippingCost}€\n-Tipo inserzione: ${type}\n-Condizioni: ${conditions}\n-Posizione: ${location}\n-Link: ${url}`
         if ((price + shippingCost) <= 550) {
-            caption = '🔴🔴🔴\n' + caption   
+            caption = '🔴🔴🔴\n' + caption
         }
         bot.telegram.sendPhoto(user.chatId,
             image,
@@ -42,7 +42,7 @@ module.exports.botSend = async (query, { url, title, image, type, conditions, pr
 }
 
 module.exports.botNotify = async (message) => {
-    var admin = await whitelistSchema.findOne({isAdmin: true})
+    var admin = await whitelistSchema.findOne({ isAdmin: true })
     bot.telegram.sendMessage(admin.chatId, `Notifica: ${message}`)
 }
 

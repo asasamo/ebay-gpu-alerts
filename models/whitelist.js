@@ -13,8 +13,8 @@ const whitelistSchema = new mongoose.Schema({
         required: true
     },
     isAdmin: {
-            type: Boolean,
-            default: false
+        type: Boolean,
+        default: false
     },
     username: String,
     joinDate: {
