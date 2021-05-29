@@ -9,12 +9,13 @@ async function asyncForEach(array, callback) {
 
 module.exports.run = async (ctx) => {
     var total_items = await itemSchema.countDocuments()
-    var messaggio = `---------------Statistiche---------------\n⚫Totali: ${total_items} oggetti\n⚫Percentuale per query:`
+    var messaggio = `---------------Statistiche---------------\n⚫Totali: ${total_items} oggetti nel database\n⚫Percentuale per query:`
     await asyncForEach(config.gpusQueries, async (e) => {
-        let numero_per_query = await itemSchema.find({ query: e.replaceAll(' ', '-') }).countDocuments()
-        messaggio += `\n    - [${e.replaceAll(' ', '-')}]: ${((numero_per_query * 100) / total_items).toFixed(1)}%`
+        let items_per_query = await itemSchema.find({ query: e.replaceAll(' ', '-') }).countDocuments()
+        let prezzo_medio_query = await itemSchema.aggregate([{ $match: { query: e.replaceAll(' ', '-') } }, { $group: { _id: null, AverageValue: { $avg: "$price" } } }])
+        messaggio += `\n    - [${e.replaceAll(' ', '-')}]: ${((items_per_query * 100) / total_items).toFixed(1)}% con prezzo medio di ${prezzo_medio_query[0].AverageValue.toFixed(2)} €`
     })
     var prezzo_medio = await itemSchema.aggregate([{ $group: { _id: null, AverageValue: { $avg: "$price" } } }])
-    messaggio += `\n⚫Prezzo medio: ${prezzo_medio[0].AverageValue.toFixed(2)}€`
+    messaggio += `\n⚫Prezzo medio di tutti gli oggetti: ${prezzo_medio[0].AverageValue.toFixed(2)} €`
     ctx.reply(messaggio)
 }

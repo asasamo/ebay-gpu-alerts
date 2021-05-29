@@ -16,16 +16,22 @@ function start() {
         log.info('Searching...')
         // botNotify('Searching...') //Debug - annoying
         config.gpusQueries.forEach(async (query, index) => {
-            let results = await searchNewlyAdded(query)
-            results.forEach((result, i) => {
-                new itemSchema(result)
-                    .save(async (err, result) => {
-                        if (!err) {
-                            log.newItem(query, result)
-                            log.botNewItem(await botSend(query, result))
-                        }
+            searchNewlyAdded(query)
+                .then(results => {
+                    results.forEach((result, i) => {
+                        new itemSchema(result)
+                            .save(async (err, result) => {
+                                if (!err) {
+                                    log.newItem(query, result)
+                                    log.botNewItem(await botSend(query, result))
+                                }
+                            })
                     })
-            })
+                })
+                .catch(err => {
+                    console.error(err.code)
+                    botNotify(`errore axios codice ${err.code}`)
+                })
         })
 
         start()
