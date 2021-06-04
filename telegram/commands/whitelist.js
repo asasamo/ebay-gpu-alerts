@@ -4,7 +4,7 @@ const whitelistSchema = require('../../models/whitelist')
 module.exports.run = async (ctx) => {
     const ADMIN = await whitelistSchema.findOne({ isAdmin: true })
     if (ctx.chat.id === ADMIN.chatId) {
-        args = ctx.message.text.split(' ')
+        var args = ctx.message.text.split(' ')
         switch (args[1]) {
             case 'add':
                 new whitelistSchema({ chatId: args[2], username: args[3] }).save(async err => {
