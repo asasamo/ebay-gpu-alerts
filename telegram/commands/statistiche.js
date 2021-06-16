@@ -56,13 +56,13 @@ module.exports.run = async (ctx) => {
     var messaggio = `---------------Statistiche---------------\n⚫Totale: ${total_items} oggetti nel database\n⚫Percentuale per query:`
 
     await asyncForEach(config.gpusQueries, async (query) => {
-        var query = query.replaceAll(' ', '-')
+        query = query.replaceAll(' ', '-')
 
         // Percentuale
         let items_per_query = await itemSchema.find({ query: query }).countDocuments()
 
         // Prezzo medio per query
-        let prezzo_medio_query = await itemSchema.aggregate([{ $match: { query: query } }, { $group: { _id: null, AverageValue: { $avg: "$price" } } }])
+        let prezzo_medio_query = await itemSchema.aggregate([{ $match: { date: { $gt: new Date(moment().subtract(1, 'days')) }, query: query } }, { $group: { _id: null, AverageValue: { $avg: "$price" } } }])
 
         // Differenza di prezzo
         let differenza_percentuale = await getPriceDifference(query, giorni)
