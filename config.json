@@ -1,5 +1,5 @@
 {
-    "MongoDB": "mongodb://{{user}}:{{pass}}@192.168.0.8:27017/{{db}}?authSource=admin",
+    "MongoDB": "mongodb://{{user}}:{{pass}}@192.168.1.8:27017/{{db}}?authSource=admin",
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0",
     "gpusQueries": [
         "rtx 3070",
