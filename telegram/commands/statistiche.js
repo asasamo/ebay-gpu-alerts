@@ -18,7 +18,9 @@ async function getPriceDifference(query, days) {
             date: {
                 $gt: new Date(moment().subtract(days, 'days')),
                 $lt: new Date(moment().subtract(1, 'days'))
-            }, query: query
+            },
+            query: query,
+            type: 'purchaseNow'
         }
     },
     {
@@ -34,7 +36,8 @@ async function getPriceDifference(query, days) {
         {
             date:
                 { $gt: new Date(moment().subtract(1, 'days')) },
-            query: query
+            query: query,
+            type: 'purchaseNow'
         }
     }, {
         $group:
@@ -53,7 +56,7 @@ module.exports.run = async (ctx) => {
     var giorni = !isNaN(args[1]) ? +args[1] : DEFAULT_PRICE_DIFFERENCE_DAYS
 
     var total_items = await itemSchema.countDocuments()
-    var messaggio = `---------------Statistiche---------------\n⚫Totale: ${total_items} oggetti nel database\n⚫Percentuale per query:`
+    var messaggio = `---------------Statistiche---------------\n⚫Totale: ${total_items} oggetti nel database\n⚫Percentuale per query "Compralo Subito":`
 
     await asyncForEach(config.gpusQueries, async (query) => {
         query = query.replaceAll(' ', '-')
@@ -62,7 +65,7 @@ module.exports.run = async (ctx) => {
         let items_per_query = await itemSchema.find({ query: query }).countDocuments()
 
         // Prezzo medio per query
-        let prezzo_medio_query = await itemSchema.aggregate([{ $match: { date: { $gt: new Date(moment().subtract(1, 'days')) }, query: query } }, { $group: { _id: null, AverageValue: { $avg: "$price" } } }])
+        let prezzo_medio_query = await itemSchema.aggregate([{ $match: { date: { $gt: new Date(moment().subtract(1, 'days')) }, query: query, type: 'purchaseNow' } }, { $group: { _id: null, AverageValue: { $avg: "$price" } } }])
 
         // Differenza di prezzo
         let differenza_percentuale = await getPriceDifference(query, giorni)
