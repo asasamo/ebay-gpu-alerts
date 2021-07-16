@@ -9,6 +9,7 @@ const whitelistSchema = require('../models/whitelist')
 
 bot.command('statistiche', require('./commands/statistiche').run)
 bot.command('whitelist', require('./commands/whitelist').run)
+bot.command('notifiche', require('./commands/notifiche').run)
 
 bot.start(async (ctx) => {
     var users = await whitelistSchema.find({})
