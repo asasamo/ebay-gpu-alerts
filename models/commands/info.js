@@ -1,0 +1,1 @@
+module.exports = (commandName, options, states) => `Utilizzo: /${commandName} ${options.length ? `[${options.join('/')}] ` : ''}${states.length ? `${states.map(s => '<' + s + '>').join(' ')}` : ''}`

@@ -79,3 +79,12 @@ module.exports.run = async (ctx) => {
 
     ctx.replyWithMarkdown(messaggio)
 }
+
+const config = exports.config = {
+    command: 'statistiche',
+    description: 'Visualizza le statistiche.',
+    arguments: {
+        options: ['giorni'],
+        states: []
+    }
+}
